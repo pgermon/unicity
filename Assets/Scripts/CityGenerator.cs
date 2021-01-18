@@ -372,15 +372,11 @@ public class CityGenerator : MonoBehaviour
 				drawBuilding(x + ortho_vector.x * planeToMapScale(ROAD_Z/2 + BUILDING_WX * 3.0f/4),
 							 y + ortho_vector.y * planeToMapScale(ROAD_Z/2 + BUILDING_WX * 3.0f/4),
 							 map, angle);
-				/*drawRoad(new Vector2(x, y), new Vector2(x + ortho_vector.x * planeToMapScale(ROAD_Z/2 + BUILDING_WX/4),
-										   y + ortho_vector.y * planeToMapScale(ROAD_Z/2 + BUILDING_WX/4)));*/
 
 				// Building on the other side of the road
 				drawBuilding(x - ortho_vector.x * planeToMapScale(ROAD_Z/2 + BUILDING_WX * 3.0f/4),
 							 y - ortho_vector.y * planeToMapScale(ROAD_Z/2 + BUILDING_WX * 3.0f/4),
 							 map, angle + 180);
-				/*drawRoad(new Vector2(x, y), new Vector2(x - ortho_vector.x * planeToMapScale(ROAD_Z/2 + BUILDING_WX/4),
-										   y - ortho_vector.y * planeToMapScale(ROAD_Z/2 + BUILDING_WX/4)));*/
 			}
 
 			if(nb > 1){
@@ -481,7 +477,8 @@ public class CityGenerator : MonoBehaviour
 				float rnd_h_coef = UnityEngine.Random.Range(0.0f, 1.0f);
 				GameObject go_skyscraper = Instantiate(skyscraper,
 														new Vector3(y / MAP_SIZE * PLANE_SIZE - PLANE_SIZE/2,
-																	height/2 * (1 + rnd_h_coef) * SKYSCRAPER_H, x / MAP_SIZE * PLANE_SIZE - PLANE_SIZE/2),
+																	height/2 * (1 + rnd_h_coef) * SKYSCRAPER_H, 
+																	x / MAP_SIZE * PLANE_SIZE - PLANE_SIZE/2),
 														Quaternion.Euler(0, angle, 0));
 				go_skyscraper.transform.localScale = new Vector3(SKYSCRAPER_WX, height * (1 + rnd_h_coef) * SKYSCRAPER_H, SKYSCRAPER_WZ);
 				go_skyscraper.gameObject.GetComponent<Building>().setIsHouse(false);

@@ -69,7 +69,6 @@ public class Building : MonoBehaviour
 
         float cos_angle = (float)Math.Cos(- Math.PI / 180 * building_rotation.y);
         float sin_angle = (float)Math.Sin(- Math.PI / 180 * building_rotation.y);
-
         
         for(int n = 0; n < Math.Floor(building_scale.y/building_scale.x); n++){
             Vector3 window_position = building_position;
