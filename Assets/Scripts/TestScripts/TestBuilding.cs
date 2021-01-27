@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Building : MonoBehaviour
+public class TestBuilding : MonoBehaviour
 {
     // Building associated to the script
     private bool is_house = false;
@@ -36,7 +36,7 @@ public class Building : MonoBehaviour
     public const float PERSON_Z = 0.15f;
 
     // A reference to the DayNightController script
-	private DayNightController controller;
+	private TestDayNightController controller;
 
     public const int COEF = 100;
 
@@ -142,8 +142,8 @@ public class Building : MonoBehaviour
                 GameObject go_person = Instantiate(person, person_init_position, Quaternion.Euler(0, building_rotation.y, 0));
                 go_person.transform.localScale = person_scale;
                 go_person.transform.SetParent(this.gameObject.transform);
-                go_person.gameObject.GetComponent<Person>().setHouse(this.gameObject);
-                go_person.gameObject.GetComponent<Person>().setInitPosition(person_init_position);
+                go_person.gameObject.GetComponent<TestPerson>().setHouse(this.gameObject);
+                go_person.gameObject.GetComponent<TestPerson>().setInitPosition(person_init_position);
                 go_persons.Add(go_person);
             }
         }
@@ -169,17 +169,17 @@ public class Building : MonoBehaviour
         }*/
 
         for(int i = 0; i < go_persons_inside.Count; i++){
-            if(go_persons_inside[i].gameObject != null && go_persons_inside[i].gameObject.GetComponent<Person>().isInit()){
+            if(go_persons_inside[i].gameObject != null && go_persons_inside[i].gameObject.GetComponent<TestPerson>().isInit()){
                 go_persons_inside[i].gameObject.transform.position = person_init_position;
                 go_persons_inside[i].gameObject.SetActive(true);
                 go_persons_inside[i].gameObject.GetComponent<UnityEngine.AI.NavMeshAgent>().enabled = true;
                 go_persons_inside[i].gameObject.GetComponent<UnityEngine.AI.NavMeshAgent>().isStopped = false;
                 
                 if(is_house){
-                    go_persons_inside[i].gameObject.GetComponent<Person>().setDestination("work");
+                    go_persons_inside[i].gameObject.GetComponent<TestPerson>().setDestination("work");
                 }
                 else{
-                    go_persons_inside[i].gameObject.GetComponent<Person>().setDestination("house");
+                    go_persons_inside[i].gameObject.GetComponent<TestPerson>().setDestination("house");
                 }
             }
             go_persons_inside.RemoveAt(i);
@@ -208,9 +208,9 @@ public class Building : MonoBehaviour
     // Set a person inside the building if the person is allowed (resident or worker) and it collides the building
     private void OnTriggerStay(Collider other){
         
-        if(other.gameObject.tag == "Person" && is_init && this.gameObject.transform.parent != null && this.gameObject.transform.parent.gameObject.GetComponent<CityGenerator>().getBuildNavMesh()){
+        if(other.gameObject.tag == "Person" && is_init && this.gameObject.transform.parent != null && this.gameObject.transform.parent.gameObject.GetComponent<TestNavMesh>().getBuildNavMesh()){
 
-            controller = this.gameObject.transform.parent.gameObject.GetComponent<DayNightController>();
+            controller = this.gameObject.transform.parent.gameObject.GetComponent<TestDayNightController>();
 
             // If the person is allowed in the building at that time of day, it is deactivated and set in the building
             if((is_house && (controller.currentTimeOfDay >= 0.75 || controller.currentTimeOfDay < 0.25) && go_persons.Contains(other.gameObject) && go_persons_inside.Count < max_persons)
@@ -234,12 +234,10 @@ public class Building : MonoBehaviour
     public void destroyBuilding(){
     
         if(is_house){
-            this.gameObject.transform.parent.gameObject.GetComponent<CityGenerator>().removeFromHouseBuildings(this.gameObject);
-            //this.gameObject.transform.parent.gameObject.GetComponent<TestNavMesh>().removeFromHouseBuildings(this.gameObject);
+            this.gameObject.transform.parent.gameObject.GetComponent<TestNavMesh>().removeFromHouseBuildings(this.gameObject);
         }
         else{
-            this.gameObject.transform.parent.gameObject.GetComponent<CityGenerator>().removeFromWorkBuildings(this.gameObject);
-            //this.gameObject.transform.parent.gameObject.GetComponent<TestNavMesh>().removeFromWorkBuildings(this.gameObject);
+            this.gameObject.transform.parent.gameObject.GetComponent<TestNavMesh>().removeFromWorkBuildings(this.gameObject);
         }
 
         Destroy(this.gameObject);
@@ -250,8 +248,8 @@ public class Building : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(is_init && this.gameObject.transform.parent != null && this.gameObject.transform.parent.gameObject.GetComponent<CityGenerator>().getBuildNavMesh()){
-            controller = this.gameObject.transform.parent.gameObject.GetComponent<DayNightController>();
+        if(is_init && this.gameObject.transform.parent != null && this.gameObject.transform.parent.gameObject.GetComponent<TestNavMesh>().getBuildNavMesh()){
+            controller = this.gameObject.transform.parent.gameObject.GetComponent<TestDayNightController>();
 
             // All the persons inside leave the house building in the morning
             if(is_house && go_persons_inside.Count > 0 && controller.currentTimeOfDay >= 0.25 && controller.currentTimeOfDay < 0.75){

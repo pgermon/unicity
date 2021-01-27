@@ -110,8 +110,8 @@ public class TestNavMesh : MonoBehaviour
 														Quaternion.Euler(0, angle, 0));
 				go_skyscraper.transform.localScale = new Vector3(SKYSCRAPER_WX, height * (1 + rnd_h_coef) * SKYSCRAPER_H, SKYSCRAPER_WZ);
 				
-				go_skyscraper.gameObject.GetComponent<Building>().setIsHouse(false);
-				go_skyscraper.gameObject.GetComponent<Building>().Init();
+				go_skyscraper.gameObject.GetComponent<TestBuilding>().setIsHouse(false);
+				go_skyscraper.gameObject.GetComponent<TestBuilding>().Init();
 				go_skyscraper.gameObject.transform.SetParent(this.gameObject.transform);
 
 				workBuildings.Add(go_skyscraper);
@@ -129,8 +129,8 @@ public class TestNavMesh : MonoBehaviour
 														  Quaternion.Euler(0, angle, 0));
 				go_work_building.transform.localScale = new Vector3(BUILDING_WX, height/2 * (1 + rnd_h_coef) * BUILDING_H, BUILDING_WX);
 				
-				go_work_building.gameObject.GetComponent<Building>().setIsHouse(false);
-				go_work_building.gameObject.GetComponent<Building>().Init();
+				go_work_building.gameObject.GetComponent<TestBuilding>().setIsHouse(false);
+				go_work_building.gameObject.GetComponent<TestBuilding>().Init();
 				go_work_building.gameObject.transform.SetParent(this.gameObject.transform);
 
 				workBuildings.Add(go_work_building);
@@ -148,8 +148,8 @@ public class TestNavMesh : MonoBehaviour
 														   Quaternion.Euler(0, angle, 0));
 				go_house_building.transform.localScale = new Vector3(BUILDING_WX, height/2 * (1 + rnd_h_coef) * BUILDING_H, BUILDING_WX);
 				
-				go_house_building.gameObject.GetComponent<Building>().setIsHouse(true);
-				go_house_building.gameObject.GetComponent<Building>().Init();
+				go_house_building.gameObject.GetComponent<TestBuilding>().setIsHouse(true);
+				go_house_building.gameObject.GetComponent<TestBuilding>().Init();
 				go_house_building.gameObject.transform.SetParent(this.gameObject.transform);
 
 				houseBuildings.Add(go_house_building);
@@ -166,8 +166,8 @@ public class TestNavMesh : MonoBehaviour
 				   								  Quaternion.Euler(0, angle, 0));
 				go_house.transform.localScale = new Vector3(HOUSE_WX, HOUSE_H, HOUSE_WZ);
 				
-				go_house.gameObject.GetComponent<Building>().setIsHouse(true);
-				go_house.gameObject.GetComponent<Building>().Init();
+				go_house.gameObject.GetComponent<TestBuilding>().setIsHouse(true);
+				go_house.gameObject.GetComponent<TestBuilding>().Init();
 				go_house.gameObject.transform.SetParent(this.gameObject.transform);
 
 				houseBuildings.Add(go_house);
@@ -185,7 +185,7 @@ public class TestNavMesh : MonoBehaviour
 	/* Select a work place that has not been assigned to a person yet */
 	public GameObject selectVacantWorkPlace(){
 		for(int i = 0; i < workBuildings.Count; i++){
-			Building b = workBuildings[i].gameObject.GetComponent<Building>();
+			TestBuilding b = workBuildings[i].gameObject.GetComponent<TestBuilding>();
 			if(b.getVacantWorkPlaces() > 0){
 				return workBuildings[i];
 			}
@@ -197,8 +197,8 @@ public class TestNavMesh : MonoBehaviour
 	public bool assignPersonToWorkPlace(GameObject person){
 		GameObject work_place = selectVacantWorkPlace();
 		if(work_place != null){
-			person.gameObject.GetComponent<Person>().setWorkPlace(work_place);
-			work_place.gameObject.GetComponent<Building>().addPerson(person);
+			person.gameObject.GetComponent<TestPerson>().setWorkPlace(work_place);
+			work_place.gameObject.GetComponent<TestBuilding>().addPerson(person);
 			return true;
 		}
 		else{
@@ -210,14 +210,14 @@ public class TestNavMesh : MonoBehaviour
 	/* Assign each person of each house building to a work place */
 	public void assignWorkPlaces(){
 		for (int i = 0; i < houseBuildings.Count; i++){
-			List<GameObject> persons = houseBuildings[i].gameObject.GetComponent<Building>().getGoPersons();
+			List<GameObject> persons = houseBuildings[i].gameObject.GetComponent<TestBuilding>().getGoPersons();
 			for (int n = 0; n < persons.Count; n++){
 				GameObject work_place = selectVacantWorkPlace();
 				if(work_place != null){
-					persons[n].gameObject.GetComponent<Person>().setWorkPlace(work_place);
+					persons[n].gameObject.GetComponent<TestPerson>().setWorkPlace(work_place);
 					persons[n].gameObject.GetComponent<UnityEngine.AI.NavMeshAgent>().enabled = true;
-					persons[n].gameObject.GetComponent<Person>().Init();
-                    work_place.gameObject.GetComponent<Building>().addPerson(persons[n]);
+					persons[n].gameObject.GetComponent<TestPerson>().Init();
+                    work_place.gameObject.GetComponent<TestBuilding>().addPerson(persons[n]);
 					inhabitants.Add(persons[n]);
 				}
 			}
@@ -228,10 +228,10 @@ public class TestNavMesh : MonoBehaviour
 	/* Initialize all the buildings */
 	public void initAllBuildings(){
 		for(int i = 0; i < houseBuildings.Count; i++){
-			houseBuildings[i].gameObject.GetComponent<Building>().Init();
+			houseBuildings[i].gameObject.GetComponent<TestBuilding>().Init();
 		}
 		for(int i = 0; i < workBuildings.Count; i++){
-			workBuildings[i].gameObject.GetComponent<Building>().Init();
+			workBuildings[i].gameObject.GetComponent<TestBuilding>().Init();
 		}
 	}
 
@@ -240,21 +240,21 @@ public class TestNavMesh : MonoBehaviour
 		while(nb_inhabitants > nb_work_places){
 			int index = (int)UnityEngine.Random.Range(0, houseBuildings.Count);
 			GameObject go_to_destroy = houseBuildings[index];
-			int nbPeople = houseBuildings[index].gameObject.GetComponent<Building>().getGoPersons().Count;
+			int nbPeople = houseBuildings[index].gameObject.GetComponent<TestBuilding>().getGoPersons().Count;
 			nb_inhabitants -= nbPeople;
 			houseBuildings.RemoveAt(index);
 			Destroy(go_to_destroy);
 			Debug.Log("House building destroyed because of too many houses");
-			//go_to_destroy.gameObject.GetComponent<Building>().destroyBuilding(false);
+			//go_to_destroy.gameObject.GetComponent<TestBuilding>().destroyBuilding(false);
 		}
 	}
 
 	public void countInhabitantAndWorkPlaces(){
 		for(int i = 0; i < houseBuildings.Count; i++){
-			nb_inhabitants += houseBuildings[i].gameObject.GetComponent<Building>().getGoPersons().Count;
+			nb_inhabitants += houseBuildings[i].gameObject.GetComponent<TestBuilding>().getGoPersons().Count;
 		}
 		for(int i = 0; i < workBuildings.Count; i++){
-			nb_work_places += workBuildings[i].gameObject.GetComponent<Building>().getMaxPersons();
+			nb_work_places += workBuildings[i].gameObject.GetComponent<TestBuilding>().getMaxPersons();
 		}
 	}
 

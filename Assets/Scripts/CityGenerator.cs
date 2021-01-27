@@ -14,7 +14,7 @@ public class CityGenerator : MonoBehaviour
 
 	/* Parameters for map generation */
 	public const int COEF = 100;
-    public const int NPOINTS = 10;
+    public int NPOINTS = 10;
     public const int MAP_SIZE = 1000;
 	private int PLANE_SIZE = 10;
 

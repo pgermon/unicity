@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class DayNightController : MonoBehaviour {
+public class TestDayNightController : MonoBehaviour {
 
     // The directional light which we manipulate as our sun.
     public Light sun;
@@ -36,7 +36,7 @@ public class DayNightController : MonoBehaviour {
     void Update() {
 
         // Update the sceen once all the elements have been initialized
-        if(this.gameObject.GetComponent<CityGenerator>().getBuildNavMesh()){
+        if(this.gameObject.GetComponent<TestNavMesh>().getBuildNavMesh()){
             
             // This makes currentTimeOfDay go from 0 to 1 in the number of seconds we've specified.
             currentTimeOfDay += (Time.deltaTime / secondsInFullDay) * timeMultiplier;
@@ -103,7 +103,7 @@ public class DayNightController : MonoBehaviour {
     }
 
     void UpdateCityObjects(){
-        CityGenerator city = this.gameObject.GetComponent<CityGenerator>();
+        TestNavMesh city = this.gameObject.GetComponent<TestNavMesh>();
         
         List<GameObject> lampposts = city.getLampposts();
 
@@ -121,13 +121,13 @@ public class DayNightController : MonoBehaviour {
             // The house buildings push the persons outside
             List<GameObject> house_buildings = city.getHouseBuildings();
             for(int i = 0; i < house_buildings.Count; i++){
-                house_buildings[i].gameObject.GetComponent<Building>().leaveBuilding();
+                house_buildings[i].gameObject.GetComponent<TestBuilding>().leaveBuilding();
             }
 
             // The inhabitants go to work
             List<GameObject> inhabitants = city.getInhabitants();
             for(int i = 0; i < inhabitants.Count; i++){
-                Person p = inhabitants[i].gameObject.GetComponent<Person>();
+                TestPerson p = inhabitants[i].gameObject.GetComponent<TestPerson>();
                 if(inhabitants[i].gameObject.activeSelf && p.getStrDestination() != "work"){
                     p.setDestination("work");
                 }
@@ -148,13 +148,13 @@ public class DayNightController : MonoBehaviour {
             // The work buildings push the persons outside
             List<GameObject> work_buildings = city.getWorkBuildings();
             for(int i = 0; i < work_buildings.Count; i++){
-                work_buildings[i].gameObject.GetComponent<Building>().leaveBuilding();
+                work_buildings[i].gameObject.GetComponent<TestBuilding>().leaveBuilding();
             }
 
             // The inhabitants go to their house
             List<GameObject> inhabitants = city.getInhabitants();
             for(int i = 0; i < inhabitants.Count; i++){
-                Person p = inhabitants[i].gameObject.GetComponent<Person>();
+                TestPerson p = inhabitants[i].gameObject.GetComponent<TestPerson>();
                 if(inhabitants[i].gameObject.activeSelf && p.getStrDestination() != "house"){
                     p.setDestination("house");
                 }
